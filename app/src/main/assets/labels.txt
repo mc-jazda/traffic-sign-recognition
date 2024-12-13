@@ -1,0 +1,23 @@
+Przejście dla pieszych
+Zakaz zatrzymywania się
+Parking
+Ustąp pierwszeństwa
+Droga z pierwszeństwem
+Droga jednokierunkowa
+Zakaz skręcania w lewo
+Zakaz skręcania w prawo
+Przystanek autobusowy
+Nakaz jazdy z prawej strony znaku
+Nakaz jazdy w prawo za znakiem
+Ograniczenie prędkości
+Ruch okrężny
+Zakaz wjazdu
+Koniec drogi z pierwszeństwem
+Droga dla pieszych i rowerów
+Nakaz jazdy prosto
+Zakaz wjazdu samochodów ciężarowych
+Stop
+Zakaz ruchu w obu kierunkach
+Koniec ograniczenia prędkości
+Zakaz zawracania
+Zakaz postoju
