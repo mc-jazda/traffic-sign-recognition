@@ -3,19 +3,16 @@ package com.example.trafficsignrecognition.features.recognizer.data.datasources
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.SystemClock
-import android.util.Log
 import com.example.trafficsignrecognition.core.failure.SignDetectorException
 import com.example.trafficsignrecognition.features.recognizer.data.models.BoundingBoxModel
 import com.example.trafficsignrecognition.features.recognizer.data.models.SignDetectorResultModel
 import com.example.trafficsignrecognition.features.recognizer.domain.entities.SignDetectorResult
 import com.example.trafficsignrecognition.features.recognizer.domain.usecases.DetectSignsParams
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
-import org.tensorflow.lite.gpu.CompatibilityList
-import org.tensorflow.lite.gpu.GpuDelegate
-import org.tensorflow.lite.gpu.GpuDelegateFactory
-import org.tensorflow.lite.nnapi.NnApiDelegate
 import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.common.ops.CastOp
 import org.tensorflow.lite.support.common.ops.NormalizeOp
@@ -27,8 +24,9 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import javax.inject.Inject
 
+
 interface SignsDetectorDatasource {
-    suspend fun detectTrafficSigns(params: DetectSignsParams): SignDetectorResult
+    suspend fun detectTrafficSigns(params: DetectSignsParams): Flow<SignDetectorResult>
     fun setupDetector()
     fun clearDetector()
 }
@@ -84,7 +82,7 @@ class SignsDetectorDatasourceImpl @Inject constructor(
         interpreter = null
     }
 
-    override suspend fun detectTrafficSigns(params: DetectSignsParams): SignDetectorResult {
+    override suspend fun detectTrafficSigns(params: DetectSignsParams): Flow<SignDetectorResult> = flow {
         interpreter ?: throw SignDetectorException("Interpreter hasn't been initialized")
 
         if (tensorWidth == 0 || tensorHeight == 0 || numChannel == 0 || numElements == 0)
@@ -107,10 +105,10 @@ class SignsDetectorDatasourceImpl @Inject constructor(
         val bestBoxes = bestBox(output.floatArray)
         inferenceTime = SystemClock.uptimeMillis() - inferenceTime
 
-        return if (bestBoxes == null) {
-            SignDetectorResultModel(listOf(), inferenceTime, isBoxListEmpty = true)
+         if (bestBoxes == null) {
+            emit(SignDetectorResultModel(listOf(), inferenceTime, isBoxListEmpty = true))
         } else {
-            SignDetectorResultModel(bestBoxes, inferenceTime)
+            emit(SignDetectorResultModel(bestBoxes, inferenceTime))
         }
     }
 
@@ -200,7 +198,7 @@ class SignsDetectorDatasourceImpl @Inject constructor(
         private const val INPUT_STANDARD_DEVIATION = 255f
         private val INPUT_IMAGE_TYPE = DataType.FLOAT32
         private val OUTPUT_IMAGE_TYPE = DataType.FLOAT32
-        private const val CONFIDENCE_THRESHOLD = 0.95f
+        private const val CONFIDENCE_THRESHOLD = 0.5f
         private const val IOU_THRESHOLD = 0.5F
         const val MODEL_PATH = "best_float32.tflite"
         const val LABELS_PATH = "labels.txt"

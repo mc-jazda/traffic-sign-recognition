@@ -77,6 +77,10 @@ dependencies {
     implementation(libs.tensorflow.lite.gpu)
     implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite.v2120)  // TensorFlow Lite Core
+    implementation (libs.tensorflow.lite.task.vision)
+    implementation(libs.tensorflow.lite.gpu.delegate.plugin)
+    implementation(libs.tensorflow.lite.gpu.v290)
+
 
     // Hilt
     implementation(libs.hilt.android)

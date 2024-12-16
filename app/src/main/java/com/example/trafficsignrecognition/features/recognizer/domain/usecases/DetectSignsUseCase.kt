@@ -6,13 +6,14 @@ import com.example.trafficsignrecognition.core.usecase.UseCaseResult
 import com.example.trafficsignrecognition.features.recognizer.domain.entities.SignDetectorResult
 import com.example.trafficsignrecognition.features.recognizer.domain.repositories.SignsDetectorRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DetectSignsUseCase @Inject constructor(
     private val repository: SignsDetectorRepository,
 ) : AsyncUseCase<SignDetectorResult, DetectSignsParams>() {
-    override suspend fun invoke(params: DetectSignsParams): UseCaseResult<SignDetectorResult> =
+    override suspend fun invoke(params: DetectSignsParams): Flow<UseCaseResult<SignDetectorResult>> =
         withContext(Dispatchers.Default) {
             repository.detectTrafficSigns(params)
         }
