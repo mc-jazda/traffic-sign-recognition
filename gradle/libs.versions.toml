@@ -9,9 +9,12 @@ lifecycleRuntimeKtx = "2.6.1"
 activityCompose = "1.8.0"
 composeBom = "2024.04.01"
 runtimeLivedata = "1.7.5"
-tensorflowLite = "2.13.0"
-tensorflowLiteGpu = "2.13.0"
+tensorflowLite = "2.14.0"
+tensorflowLiteGpu = "2.14.0"
 litertGpuApi = "1.0.1"
+tensorflowLiteGpuDelegatePlugin = "0.4.0"
+tensorflowLiteGpuVersion = "2.14.0"
+tensorflowLiteTaskVision = "0.4.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -31,8 +34,10 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 litert = { module = "com.google.ai.edge.litert:litert" }
-tensorflow-lite = "org.tensorflow:tensorflow-lite:2.13.0"
+tensorflow-lite = "org.tensorflow:tensorflow-lite:2.14.0"
 tensorflow-lite-gpu = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tensorflowLiteGpu" }
+tensorflow-lite-gpu-delegate-plugin = { module = "org.tensorflow:tensorflow-lite-gpu-delegate-plugin", version.ref = "tensorflowLiteGpuDelegatePlugin" }
+tensorflow-lite-gpu-v290 = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tensorflowLiteGpuVersion" }
 tensorflow-lite-support = "org.tensorflow:tensorflow-lite-support:0.4.4"
 hilt-android = "com.google.dagger:hilt-android:2.51.1"
 hilt-compiler = "com.google.dagger:hilt-android-compiler:2.51.1"
@@ -45,6 +50,7 @@ camerax-mlkit-vision = "androidx.camera:camera-mlkit-vision:1.5.0-alpha03"
 camerax-extensions = "androidx.camera:camera-extensions:1.5.0-alpha03"
 lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7"
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
+tensorflow-lite-task-vision = { module = "org.tensorflow:tensorflow-lite-task-vision", version.ref = "tensorflowLiteTaskVision" }
 tensorflow-lite-v2120 = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
 litert-gpu-api = { group = "com.google.ai.edge.litert", name = "litert-gpu-api", version.ref = "litertGpuApi" }
 

@@ -50,6 +50,7 @@ class SignDetectorViewModel @Inject constructor(
 
     private var lastFrameTimestamp = 0L // Track the last frame's timestamp
     private val frameIntervalMillis = TimeUnit.SECONDS.toMillis(1) / 5 // 5
+    private var frameSkipCounter = 0
 
     init {
         val result = setupSignDetectorUseCase(NoParams())
@@ -61,19 +62,18 @@ class SignDetectorViewModel @Inject constructor(
 
     private fun detectSigns(params: DetectSignsParams) {
         viewModelScope.launch(Dispatchers.Default) {
-            when (val result = detectSignsUseCase(params)) {
-                is UseCaseResultData -> {
-                    _signDetectionResult.value = result.data
-                    if (!result.data.isBoxListEmpty) {
-                        Log.v("DETECTED SIGN", result.data.boundingBoxes[0].clsName)
+            detectSignsUseCase(params)
+                .collect { result ->
+                    when (result) {
+                        is UseCaseResultData -> {
+                            _signDetectionResult.value = result.data
+                        }
+
+                        is UseCaseResultFailure -> {
+                            _errorMessage.value = result.failure.errorMessage
+                        }
                     }
                 }
-
-                is UseCaseResultFailure -> {
-                    _errorMessage.value = result.failure.errorMessage
-                    Log.v("DEBUG: ", result.failure.description ?: "No description")
-                }
-            }
         }
     }
 
@@ -82,6 +82,15 @@ class SignDetectorViewModel @Inject constructor(
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            val resolutionSelector = ResolutionSelector.Builder()
+                .setResolutionStrategy(
+                    ResolutionStrategy(
+                        android.util.Size(600, 900),
+                        ResolutionStrategy.FALLBACK_RULE_CLOSEST_LOWER,
+                    )
+                )
+                .build()
+
 
             val preview = Preview.Builder()
                 .setTargetRotation(previewView.display.rotation)
@@ -89,30 +98,19 @@ class SignDetectorViewModel @Inject constructor(
                     it.surfaceProvider = previewView.surfaceProvider
                 }
 
-            val resolutionSelector = ResolutionSelector.Builder()
-                .setResolutionStrategy(
-                    ResolutionStrategy(
-                        android.util.Size(300, 300),
-                        ResolutionStrategy.FALLBACK_RULE_CLOSEST_LOWER,
-                    )
-                )
-                .build()
-
             val imageAnalyzer = ImageAnalysis.Builder()
-                .setResolutionSelector(resolutionSelector)
+                //.setResolutionSelector(resolutionSelector)
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
                 .build().also {
                     it.setAnalyzer(Executors.newCachedThreadPool()) { imageProxy ->
                         val bitmap: Bitmap
-                        imageProxy.use { bitmap = proxyToBitmap(imageProxy) }
+                        if(frameSkipCounter % 30 == 0) {
+                            imageProxy.use { bitmap = proxyToBitmap(imageProxy) }
+                            detectSigns(DetectSignsParams(bitmap))
+                        }
+                        frameSkipCounter++
                         imageProxy.close()
-//                        val currentTimestamp = System.currentTimeMillis()
-//                        if (currentTimestamp - lastFrameTimestamp >= frameIntervalMillis) {
-//                            lastFrameTimestamp = currentTimestamp
-//                            detectSigns(params = DetectSignsParams(bitmap))
-//                        }
-                        detectSigns(params = DetectSignsParams(bitmap))
                     }
                 }
 

@@ -9,6 +9,10 @@ import com.example.trafficsignrecognition.features.recognizer.data.datasources.S
 import com.example.trafficsignrecognition.features.recognizer.domain.entities.SignDetectorResult
 import com.example.trafficsignrecognition.features.recognizer.domain.repositories.SignsDetectorRepository
 import com.example.trafficsignrecognition.features.recognizer.domain.usecases.DetectSignsParams
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SignsDetectorRepositoryImpl @Inject constructor(
@@ -16,22 +20,20 @@ class SignsDetectorRepositoryImpl @Inject constructor(
     private val errorHandler: ErrorHandler,
 ) : SignsDetectorRepository {
 
-    override suspend fun detectTrafficSigns(params: DetectSignsParams): UseCaseResult<SignDetectorResult> {
-        try {
-            val result = datasource.detectTrafficSigns(params)
-            return UseCaseResult.success(data = result)
-
-        } catch (error: Exception) {
-            val defaultFailure = SignDetectorDetectingFailure()
-            defaultFailure.description = error.message
-            
-            return UseCaseResult.error(
-                error = errorHandler.handleError(
-                    error = error,
-                    defaultFailure = defaultFailure
-                )
-            )
-        }
+    override suspend fun detectTrafficSigns(params: DetectSignsParams): Flow<UseCaseResult<SignDetectorResult>> {
+        return datasource.detectTrafficSigns(params)
+            .map { result ->
+                UseCaseResult.success(data = result)
+            }
+            .catch { error ->
+                val defaultFailure = SignDetectorDetectingFailure().apply { description = error.message }
+                emit(UseCaseResult.error(
+                    error = errorHandler.handleError(
+                        error = error,
+                        defaultFailure = defaultFailure
+                    )
+                ))
+            }
     }
 
     override fun setupDetector(): UseCaseResult<Unit> {

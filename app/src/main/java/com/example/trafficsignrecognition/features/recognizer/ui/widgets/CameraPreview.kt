@@ -16,7 +16,11 @@ fun CameraPreview(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val previewView = remember { PreviewView(context) }
+    val previewView = remember {
+        PreviewView(context).also {
+            it.implementationMode = PreviewView.ImplementationMode.PERFORMANCE
+        }
+    }
 
     AndroidView(
         factory = { previewView },
