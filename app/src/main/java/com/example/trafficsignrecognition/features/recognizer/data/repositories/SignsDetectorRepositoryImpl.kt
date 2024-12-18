@@ -1,9 +1,9 @@
 package com.example.trafficsignrecognition.features.recognizer.data.repositories
 
+import com.example.trafficsignrecognition.core.failure.ErrorHandler
 import com.example.trafficsignrecognition.core.failure.SignDetectorClearingFailure
 import com.example.trafficsignrecognition.core.failure.SignDetectorDetectingFailure
 import com.example.trafficsignrecognition.core.failure.SignDetectorSetupFailure
-import com.example.trafficsignrecognition.core.failure.ErrorHandler
 import com.example.trafficsignrecognition.core.usecase.UseCaseResult
 import com.example.trafficsignrecognition.features.recognizer.data.datasources.SignsDetectorDatasource
 import com.example.trafficsignrecognition.features.recognizer.domain.entities.SignDetectorResult
@@ -11,7 +11,6 @@ import com.example.trafficsignrecognition.features.recognizer.domain.repositorie
 import com.example.trafficsignrecognition.features.recognizer.domain.usecases.DetectSignsParams
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 

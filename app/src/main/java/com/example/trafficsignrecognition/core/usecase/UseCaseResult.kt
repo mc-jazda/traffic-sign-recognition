@@ -28,7 +28,7 @@ sealed class UseCaseResult<T>(
 
     companion object {
         fun <T> success(data: T? = null): UseCaseResult<T> {
-            return UseCaseResultData<T>(data)
+            return UseCaseResultData(data)
         }
 
         fun <T> error(error: Failure): UseCaseResult<T> {
