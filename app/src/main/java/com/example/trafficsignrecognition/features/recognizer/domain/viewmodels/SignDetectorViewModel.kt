@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.util.Log
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.CameraState
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
@@ -12,17 +11,13 @@ import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.core.resolutionselector.ResolutionStrategy
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.ui.geometry.Size
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trafficsignrecognition.core.usecase.NoParams
 import com.example.trafficsignrecognition.core.usecase.UseCaseResultData
 import com.example.trafficsignrecognition.core.usecase.UseCaseResultFailure
-import com.example.trafficsignrecognition.features.recognizer.domain.entities.SignDetectorResult
 import com.example.trafficsignrecognition.features.recognizer.domain.usecases.ClearSignDetectorUseCase
 import com.example.trafficsignrecognition.features.recognizer.domain.usecases.DetectSignsParams
 import com.example.trafficsignrecognition.features.recognizer.domain.usecases.DetectSignsUseCase
@@ -33,7 +28,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,14 +36,12 @@ class SignDetectorViewModel @Inject constructor(
     private val detectSignsUseCase: DetectSignsUseCase,
     private val clearSignDetectorUseCase: ClearSignDetectorUseCase,
 ) : ViewModel() {
+    private val _detectedSignText = MutableStateFlow<String?>(null)
+    val detectedSignText: StateFlow<String?> = _detectedSignText
 
-    private val _signDetectionResult = MutableStateFlow<SignDetectorResult?>(null)
-    val signDetectionResult: StateFlow<SignDetectorResult?> = _signDetectionResult
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> get() = _errorMessage
 
-    private var lastFrameTimestamp = 0L // Track the last frame's timestamp
-    private val frameIntervalMillis = TimeUnit.SECONDS.toMillis(1) / 5 // 5
     private var frameSkipCounter = 0
 
     init {
@@ -66,7 +58,12 @@ class SignDetectorViewModel @Inject constructor(
                 .collect { result ->
                     when (result) {
                         is UseCaseResultData -> {
-                            _signDetectionResult.value = result.data
+                            _detectedSignText.value = when {
+                                !result.data.isBoxListEmpty -> {
+                                    result.data.boundingBoxes.firstOrNull()?.clsName ?: "Unknown"
+                                }
+                                else -> "None"
+                            }
                         }
 
                         is UseCaseResultFailure -> {

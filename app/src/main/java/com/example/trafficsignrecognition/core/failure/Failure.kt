@@ -1,6 +1,6 @@
 package com.example.trafficsignrecognition.core.failure
 
-abstract class Failure {
+abstract class Failure : Exception() {
     abstract val errorMessage: String
 
     open var description: String? = null
@@ -28,4 +28,14 @@ class SignDetectorSetupFailure : Failure() {
 class SignDetectorClearingFailure : Failure() {
     override val errorMessage: String
         get() = "Clearing after sign detector failed!"
+}
+
+class TextToSpeechInitFailure : Failure() {
+    override val errorMessage: String
+        get() = "Text to speech initialization failed!"
+}
+
+class TextToSpeechSpeakFailure : Failure() {
+    override val errorMessage: String
+        get() = "Text to speech speak failed!"
 }

@@ -12,4 +12,4 @@ abstract class AsyncUseCase<Type, Params> : BaseUseCase<Type, Params>() {
     abstract suspend operator fun invoke(params: Params): Flow<UseCaseResult<Type>>
 }
 
-class NoParams {}
+class NoParams
