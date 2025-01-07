@@ -8,8 +8,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.trafficsignrecognition.features.recognizer.ui.theme.AppTheme
 import com.example.trafficsignrecognition.features.recognizer.ui.screens.MainScreen
-import com.example.trafficsignrecognition.features.recognizer.ui.theme.TrafficSignRecognitionTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            TrafficSignRecognitionTheme {
+            AppTheme {
                 MainScreen()
             }
         }
