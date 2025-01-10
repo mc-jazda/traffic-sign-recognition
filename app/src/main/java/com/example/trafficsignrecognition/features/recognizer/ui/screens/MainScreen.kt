@@ -1,6 +1,7 @@
 package com.example.trafficsignrecognition.features.recognizer.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -59,21 +60,32 @@ fun MainScreen(
             SnackbarHost(snackbarHostState)
         }
     ) { paddingValues ->
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
-                .background(color = MaterialTheme.colorScheme.tertiaryContainer)
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 20.dp, vertical = 20.dp),
+        Column (
+            modifier = Modifier
+            .background(color = MaterialTheme.colorScheme.tertiaryContainer)
+            .fillMaxSize()
+            .padding(paddingValues)
         ) {
-            CameraPreview(
-                startCamera = { previewView -> signDetectorViewModel.startCamera(previewView) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(500.dp)
-            )
-            SignWidget(signName = detectedSignText)
+            Box(
+                modifier = modifier
+                    .background(color = MaterialTheme.colorScheme.tertiaryContainer)
+                    //.fillMaxSize()
+                    .padding(horizontal = 20.dp, vertical = 20.dp)
+                    .align(Alignment.CenterHorizontally),
+            ) {
+                CameraPreview(
+                    startCamera = { previewView -> signDetectorViewModel.startCamera(previewView) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(500.dp)
+                        .padding(bottom = 75.dp),
+                )
+                SignWidget(
+                    signName = detectedSignText,
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                )
+            }
         }
+
     }
 }
