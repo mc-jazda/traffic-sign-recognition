@@ -2,12 +2,16 @@ package com.example.trafficsignrecognition.di
 
 import com.example.trafficsignrecognition.core.failure.ErrorHandler
 import com.example.trafficsignrecognition.core.failure.ErrorHandlerImpl
+import com.example.trafficsignrecognition.features.recognizer.data.datasources.CurrentSpeedDataSource
+import com.example.trafficsignrecognition.features.recognizer.data.datasources.CurrentSpeedDataSourceImpl
 import com.example.trafficsignrecognition.features.recognizer.data.datasources.SignsDetectorDatasource
 import com.example.trafficsignrecognition.features.recognizer.data.datasources.SignsDetectorDatasourceImpl
 import com.example.trafficsignrecognition.features.recognizer.data.datasources.TextToSpeechDatasource
 import com.example.trafficsignrecognition.features.recognizer.data.datasources.TextToSpeechDatasourceImpl
+import com.example.trafficsignrecognition.features.recognizer.data.repositories.CurrentSpeedRepositoryImpl
 import com.example.trafficsignrecognition.features.recognizer.data.repositories.SignsDetectorRepositoryImpl
 import com.example.trafficsignrecognition.features.recognizer.data.repositories.TextToSpeechRepositoryImpl
+import com.example.trafficsignrecognition.features.recognizer.domain.repositories.CurrentSpeedRepository
 import com.example.trafficsignrecognition.features.recognizer.domain.repositories.SignsDetectorRepository
 import com.example.trafficsignrecognition.features.recognizer.domain.repositories.TextToSpeechRepository
 import dagger.Binds
@@ -65,4 +69,25 @@ abstract class TextToSpeechRepositoryModule {
     abstract fun bindTextToSpeechRepositoryModule(
         repository: TextToSpeechRepositoryImpl,
     ): TextToSpeechRepository
+}
+
+// current speed
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class CurrentSpeedDataSourceModule {
+    @Singleton
+    @Binds
+    abstract fun bindCurrentSpeedDataSource(
+        datasource: CurrentSpeedDataSourceImpl
+    ): CurrentSpeedDataSource
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class CurrentSpeedRepositoryModule {
+    @Singleton
+    @Binds
+    abstract fun bindCurrentSpeedRepositoryModule(
+        repository: CurrentSpeedRepositoryImpl
+    ): CurrentSpeedRepository
 }

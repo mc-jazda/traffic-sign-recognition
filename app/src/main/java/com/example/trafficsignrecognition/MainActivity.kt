@@ -8,7 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.trafficsignrecognition.features.recognizer.ui.theme.AppTheme
+import com.example.compose.AppTheme
 import com.example.trafficsignrecognition.features.recognizer.ui.screens.MainScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,6 +20,16 @@ class MainActivity : ComponentActivity() {
         if (!hasCameraPermission()) {
             ActivityCompat.requestPermissions(
                 this, arrayOf(Manifest.permission.CAMERA), 0
+            )
+        }
+        if (!hasFineLocationPermission()) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 0
+            )
+        }
+        if (!hasCoarseLocationPermission()) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 0
             )
         }
 
@@ -34,5 +44,12 @@ class MainActivity : ComponentActivity() {
     private fun hasCameraPermission() = ContextCompat.checkSelfPermission(
         this, Manifest.permission.CAMERA
     ) == PackageManager.PERMISSION_GRANTED
-}
 
+    private fun hasFineLocationPermission() = ContextCompat.checkSelfPermission(
+        this, Manifest.permission.ACCESS_FINE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
+
+    private fun hasCoarseLocationPermission() = ContextCompat.checkSelfPermission(
+        this, Manifest.permission.ACCESS_COARSE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
+}

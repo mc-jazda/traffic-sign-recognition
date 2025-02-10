@@ -3,6 +3,7 @@ package com.example.trafficsignrecognition.features.recognizer.data.datasources
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.SystemClock
+import android.util.Log
 import com.example.trafficsignrecognition.core.failure.SignDetectorException
 import com.example.trafficsignrecognition.features.recognizer.data.models.BoundingBoxModel
 import com.example.trafficsignrecognition.features.recognizer.data.models.SignDetectorResultModel

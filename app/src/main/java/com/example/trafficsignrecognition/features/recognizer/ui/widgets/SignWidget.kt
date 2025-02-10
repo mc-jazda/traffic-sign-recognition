@@ -1,6 +1,12 @@
 package com.example.trafficsignrecognition.features.recognizer.ui.widgets
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.with
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -10,8 +16,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -56,11 +64,16 @@ fun SignWidget(
     val imageResource = textToImg[signName] ?: textToImg["None"]!!
 
     Box(
+        contentAlignment = Alignment.Center,
         modifier = modifier
             .size(squareSize)
+            .shadow(
+                elevation = 8.dp,
+                shape = RoundedCornerShape(cornerRadius),
+                clip = false
+            )
             .clip(RoundedCornerShape(cornerRadius))
-            .background(MaterialTheme.colorScheme.primaryContainer) // Background color
-            //.shadow(elevation, shape = RoundedCornerShape(cornerRadius)) // Add elevation
+            .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
         AnimatedContent(
             targetState = imageResource,
@@ -72,7 +85,7 @@ fun SignWidget(
                 contentDescription = "Image inside square with padding",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxSize(0.9f)
                     .padding(imagePadding)
             )
         }

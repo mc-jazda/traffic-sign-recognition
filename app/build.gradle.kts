@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.litert.gpu.api)
+    implementation(libs.androidx.ui.text.google.fonts)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -81,7 +82,6 @@ dependencies {
     implementation(libs.tensorflow.lite.gpu.delegate.plugin)
     implementation(libs.tensorflow.lite.gpu.v290)
 
-
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
@@ -94,6 +94,10 @@ dependencies {
     implementation(libs.camerax.view)
     implementation(libs.camerax.mlkit.vision)
     implementation(libs.camerax.extensions)
+
+    // Location
+    implementation(libs.play.services.location)
+
 }
 
 kapt {

@@ -12,12 +12,12 @@ abstract class Failure : Exception() {
 
 class UseCaseResultStateFail : Failure() {
     override val errorMessage: String
-        get() = "Something went wrong..."
+        get() = "Coś poszło nie tak..."
 }
 
 class SignDetectorDetectingFailure : Failure() {
     override val errorMessage: String
-        get() = "Something went wrong during signs detection..."
+        get() = "Coś poszło nie tak podczas rozpoznawania znaku..."
 }
 
 class SignDetectorSetupFailure : Failure() {
@@ -38,4 +38,14 @@ class TextToSpeechInitFailure : Failure() {
 class TextToSpeechSpeakFailure : Failure() {
     override val errorMessage: String
         get() = "Text to speech speak failed!"
+}
+
+class FetchLocationFailure : Failure() {
+    override val errorMessage: String
+        get() = "Fetching location failed!"
+}
+
+class LocationNullFailure : Failure() {
+    override val errorMessage: String
+        get() = "Location is null"
 }

@@ -3,6 +3,7 @@ package com.example.trafficsignrecognition.features.recognizer.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,6 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trafficsignrecognition.features.recognizer.domain.viewmodels.SignDetectorViewModel
 import com.example.trafficsignrecognition.features.recognizer.domain.viewmodels.TextToSpeechViewModel
 import com.example.trafficsignrecognition.features.recognizer.ui.widgets.CameraPreview
+import com.example.trafficsignrecognition.features.recognizer.ui.widgets.CurrentSpeed
 import com.example.trafficsignrecognition.features.recognizer.ui.widgets.SignWidget
 
 @Composable
@@ -54,7 +56,7 @@ fun MainScreen(
 
     Scaffold(
         modifier = Modifier.background(
-            color = MaterialTheme.colorScheme.tertiaryContainer
+            color = MaterialTheme.colorScheme.surface
         ),
         snackbarHost = {
             SnackbarHost(snackbarHostState)
@@ -62,14 +64,14 @@ fun MainScreen(
     ) { paddingValues ->
         Column (
             modifier = Modifier
-            .background(color = MaterialTheme.colorScheme.tertiaryContainer)
+            .background(color = MaterialTheme.colorScheme.surface)
             .fillMaxSize()
             .padding(paddingValues)
+
         ) {
             Box(
                 modifier = modifier
-                    .background(color = MaterialTheme.colorScheme.tertiaryContainer)
-                    //.fillMaxSize()
+                    .background(color = MaterialTheme.colorScheme.surface)
                     .padding(horizontal = 20.dp, vertical = 20.dp)
                     .align(Alignment.CenterHorizontally),
             ) {
@@ -77,13 +79,20 @@ fun MainScreen(
                     startCamera = { previewView -> signDetectorViewModel.startCamera(previewView) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(500.dp)
+                        .height(600.dp)
                         .padding(bottom = 75.dp),
                 )
                 SignWidget(
                     signName = detectedSignText,
                     modifier = Modifier.align(Alignment.BottomCenter)
                 )
+            }
+            Spacer(modifier = Modifier.height(50.dp))
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                CurrentSpeed()
             }
         }
 

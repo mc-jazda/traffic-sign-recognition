@@ -3,7 +3,6 @@ package com.example.trafficsignrecognition.features.recognizer.ui.widgets
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -16,17 +15,15 @@ fun CameraPreview(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val previewView = remember {
-        PreviewView(context).also {
-            it.implementationMode = PreviewView.ImplementationMode.PERFORMANCE
-        }
-    }
-
     AndroidView(
-        factory = { previewView },
+        factory = { _ ->
+            PreviewView(context).apply {
+                implementationMode = PreviewView.ImplementationMode.PERFORMANCE
+            }.also { previewView ->
+                startCamera(previewView)
+            }
+        },
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
-    ) {
-        startCamera(previewView)
-    }
+    )
 }

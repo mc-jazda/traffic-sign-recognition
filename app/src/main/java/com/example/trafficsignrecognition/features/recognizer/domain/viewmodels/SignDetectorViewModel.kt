@@ -58,11 +58,12 @@ class SignDetectorViewModel @Inject constructor(
                 .collect { result ->
                     when (result) {
                         is UseCaseResultData -> {
+                            Log.v("DETECT_inf", "${result.data.inferenceTime}")
                             _detectedSignText.value = when {
                                 !result.data.isBoxListEmpty -> {
-                                    result.data.boundingBoxes.firstOrNull()?.clsName ?: "Unknown"
+                                    result.data.boundingBoxes.firstOrNull()?.clsName
                                 }
-                                else -> "None"
+                                else -> null
                             }
                         }
 
@@ -96,7 +97,6 @@ class SignDetectorViewModel @Inject constructor(
                 }
 
             val imageAnalyzer = ImageAnalysis.Builder()
-                //.setResolutionSelector(resolutionSelector)
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
                 .build().also {
